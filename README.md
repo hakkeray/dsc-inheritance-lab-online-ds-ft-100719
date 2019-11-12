@@ -40,7 +40,30 @@ In the cell below, create an abstract superclass that meets these specifications
 
 ```python
 class Animal(object):
-    pass
+    def __init__(self, name, weight):
+        self.name = name
+        self.size = None
+        self.weight = weight
+        self.species = None
+        self.food_type = None
+        self.nocturnal = False
+    
+    def sleep(self):
+        if self.nocturnal:
+            print("{} sleeps during the day.".format(self.name))
+        else:
+            print("{} sleeps at night.".format(self.name))
+    
+    def eat(self, food):
+        if self.food_type == 'omnivore':
+            print("{} the {} thinks {} is yummy!".format(self.name, self.species, food))
+        elif (food == 'meat' and self.food_type == 'carnivore'):
+            print("{} the {} thinks {} is yummy!".format(self.name, self.species, food))
+        elif (food == 'plants' and self.food_type == 'herbivore'):
+            print("{} the {} thinks {} is yummy!".format(self.name, self.species, food))
+        else:
+            print("I don't eat this!")
+                
 ```
 
 Great! Now that you have our Abstract Superclass, you can begin building out the specific animal classes.
@@ -58,7 +81,12 @@ In the cell below, complete the `Elephant` class.  This class should:
 
 ```python
 class Elephant(Animal):
-    pass
+    def __init__(self, name, weight):
+        super().__init__(name, weight)
+        self.species = 'elephant'
+        self.size = 'enormous'
+        self.food_type = 'herbivore'
+        self.nocturnal = False
 ```
 
 Great! Now, in the cell below, create a `Tiger` class.  This class should:
@@ -72,7 +100,12 @@ Great! Now, in the cell below, create a `Tiger` class.  This class should:
 
 ```python
 class Tiger(Animal):
-    pass
+    def __init__(self, name, weight):
+        super().__init__(name, weight)
+        self.species = 'tiger'
+        self.size = 'large'
+        self.food_type = 'carnivore'
+        self.nocturnal = True
 ```
 
 Great! 2 More classes to go. In the cell below, create a `Raccoon` class.  This class should:
@@ -86,7 +119,12 @@ Great! 2 More classes to go. In the cell below, create a `Raccoon` class.  This 
 
 ```python
 class Raccoon(Animal):
-    pass
+    def __init__(self, name, weight):
+        super().__init__(name, weight)
+        self.species = 'raccoon'
+        self.size = 'small'
+        self.food_type = 'omnivore'
+        self.nocturnal = True
 ```
 
 Finally, create a `Gorilla` class.  This class should:
@@ -100,7 +138,12 @@ Finally, create a `Gorilla` class.  This class should:
 
 ```python
 class Gorilla(Animal):
-    pass
+    def __init__(self, name, weight):
+        super().__init__(name, weight)
+        self.species = 'gorilla'
+        self.size = 'large'
+        self.food_type = 'herbivore'
+        self.nocturnal = False
 ```
 
 ## Using Our Objects
@@ -124,7 +167,22 @@ The function should then:
 
 ```python
 def add_animal_to_zoo(zoo, animal_type, name, weight):
-    pass
+    animal = None
+    
+    if animal_type == 'tiger':
+        animal = Tiger(name, weight)
+    elif animal_type == 'elephant':
+        animal = Elephant(name, weight)
+    elif animal_type == 'gorilla':
+        animal = Gorilla(name, weight)
+    elif animal_type == 'raccoon':
+        animal = Raccoon(name, weight)
+    else:
+        print("The zoo doesn't recognize that type of animal.")
+    
+    zoo.append(animal)
+    
+    return zoo
 ```
 
 Great! Now, add some animals to your zoo. 
@@ -139,7 +197,29 @@ Create the following animals and add them to your zoo.  The names and weights ar
 
 ```python
 # Create your animals and add them to the 'zoo' in this cell!
+new_animals = ['elephant', 'elephant', 'raccoon', 'raccoon', 'gorilla', 'tiger', 'tiger', 'tiger']
+
+zoo = []
+
+for i in new_animals:
+    zoo = add_animal_to_zoo(zoo, i, "name", 100)
+    
+zoo
 ```
+
+
+
+
+    [<__main__.Elephant at 0x11ff42550>,
+     <__main__.Elephant at 0x11ff425f8>,
+     <__main__.Raccoon at 0x11ff424e0>,
+     <__main__.Raccoon at 0x11ff42a90>,
+     <__main__.Gorilla at 0x11ff420b8>,
+     <__main__.Tiger at 0x11ff426d8>,
+     <__main__.Tiger at 0x11ff42fd0>,
+     <__main__.Tiger at 0x11ff426a0>]
+
+
 
 Great! Now that you have a populated zoo, you can do what the zookeeper hired you to do--write a program that feeds the correct animals the right food at the right times!
 
@@ -155,16 +235,34 @@ This function should:
 
 
 ```python
-def feed_animals(zoo, time='Day'):
-    pass
+def feed_animals(zoo, time='day'):
+    for animal in zoo:
+        if time == 'day':
+            if animal.nocturnal == False:
+                if animal.food_type == 'carnivore':
+                    animal.eat('meat')
+                else:
+                    animal.eat('plants')
+        else:
+            if animal.nocturnal == True:
+                if animal.food_type == 'carnivore':
+                    animal.eat('meat')
+                else:
+                    animal.eat('plants')
+        
 ```
 
 Now, test out your program.  Call the function for a daytime feeding below.
 
 
 ```python
-
+feed_animals(zoo)
 ```
+
+    name the elephant thinks plants is yummy!
+    name the elephant thinks plants is yummy!
+    name the gorilla thinks plants is yummy!
+
 
 If the elephants and gorrillas were fed then things should be good!
 
@@ -172,8 +270,15 @@ In the cell below, call `feed_animals` again, but this time set `time='Night'`
 
 
 ```python
-
+feed_animals(zoo, time='night')
 ```
+
+    name the raccoon thinks plants is yummy!
+    name the raccoon thinks plants is yummy!
+    name the tiger thinks meat is yummy!
+    name the tiger thinks meat is yummy!
+    name the tiger thinks meat is yummy!
+
 
 That's it! You've used OOP and inheritance to build a working function to help the zookeeper feed his animals the right food at the correct times!
 
